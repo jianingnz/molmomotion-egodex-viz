@@ -1,2 +1,14 @@
-[{"name": "default", "label": "\"Put white ball on white 3D printed base\" (default)"},
- {"name": "moveaway", "label": "\"Move white ball far away from the white 3D printed base\""}]
+[
+ {
+  "name": "default",
+  "label": "\"Put white ball on white 3D printed base\" (default)"
+ },
+ {
+  "name": "moveaway",
+  "label": "\"Move white ball far away from the white 3D printed base\""
+ },
+ {
+  "name": "background",
+  "label": "\"move the white ball to the background\""
+ }
+]
