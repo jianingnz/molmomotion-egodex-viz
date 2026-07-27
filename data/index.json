@@ -10,5 +10,13 @@
  {
   "name": "background",
   "label": "\"move the white ball to the background\""
+ },
+ {
+  "name": "underbase",
+  "label": "\"Put white ball under white 3D printed base\""
+ },
+ {
+  "name": "right",
+  "label": "\"Put white ball far to the right\""
  }
 ]
