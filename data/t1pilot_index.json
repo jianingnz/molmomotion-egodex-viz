@@ -1,0 +1,53 @@
+[
+ {
+  "label": "bear",
+  "refs": [
+   {
+    "name": "t1p_bear_gt",
+    "label": "Ground truth"
+   },
+   {
+    "name": "t1p_bear_A",
+    "label": "A: full model"
+   },
+   {
+    "name": "t1p_bear_C",
+    "label": "C: black frames"
+   }
+  ]
+ },
+ {
+  "label": "bike-packing",
+  "refs": [
+   {
+    "name": "t1p_bike-packing_gt",
+    "label": "Ground truth"
+   },
+   {
+    "name": "t1p_bike-packing_A",
+    "label": "A: full model"
+   },
+   {
+    "name": "t1p_bike-packing_C",
+    "label": "C: black frames"
+   }
+  ]
+ },
+ {
+  "label": "blackswan",
+  "refs": [
+   {
+    "name": "t1p_blackswan_gt",
+    "label": "Ground truth"
+   },
+   {
+    "name": "t1p_blackswan_A",
+    "label": "A: full model"
+   },
+   {
+    "name": "t1p_blackswan_C",
+    "label": "C: black frames"
+   }
+  ]
+ }
+]
