@@ -1,0 +1,28 @@
+[
+ {
+  "label": "bear (deformable, 8 parts)",
+  "refs": [
+   {
+    "name": "t2p_bear_objA",
+    "label": "prediction (8 part points)"
+   }
+  ]
+ },
+ {
+  "label": "pigs (multi-object)",
+  "refs": [
+   {
+    "name": "t2p_pigs_objA",
+    "label": "object A only"
+   },
+   {
+    "name": "t2p_pigs_objB",
+    "label": "object B only"
+   },
+   {
+    "name": "t2p_pigs_mixed",
+    "label": "mixed 4A+4B (Tier 1)"
+   }
+  ]
+ }
+]

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test 2 pilot — deformable & multi-object (bear, pigs)</title>
+<style>
+  :root { --fg:#333; --muted:#888; --line:#e2e2e2; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+         background:#fafafa; color:var(--fg); padding:18px 22px; }
+  h1 { font-size:17px; font-weight:600; margin-bottom:2px; }
+  #subtitle { font-size:13px; color:var(--muted); margin-bottom:12px; }
+  #runs { margin-bottom:12px; }
+  #runs button { font-size:13px; padding:4px 12px; margin-right:6px; margin-bottom:4px;
+                 border:1px solid var(--line); border-radius:5px; background:#fff;
+                 color:var(--fg); cursor:pointer; }
+  #runs button.active { background:#333; color:#fff; border-color:#333; }
+  .panel { background:#fff; border:1px solid var(--line); border-radius:8px;
+           padding:10px; margin-bottom:14px; }
+  .panel h2 { font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase;
+              letter-spacing:.05em; margin-bottom:8px; }
+  #videos { display:flex; gap:10px; }
+  .vcell { flex:1; min-width:0; }
+  .vcell .cap { font-size:12px; color:var(--fg); margin-bottom:5px; text-align:center;
+                white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .vcell video { width:100%; border-radius:4px; display:block; background:#000; }
+  #framestrip { display:flex; gap:6px; max-width:560px; }
+  #framestrip figure { flex:1; }
+  #framestrip img { width:100%; border-radius:3px; display:block; }
+  #framestrip figcaption { font-size:11px; color:var(--muted); text-align:center; margin-top:3px; }
+  #threewrap { position:relative; }
+  #three { width:100%; height:430px; border-radius:4px; overflow:hidden; }
+  .vplabel { position:absolute; top:8px; font-size:12px; color:#555;
+             background:rgba(255,255,255,.75); padding:2px 8px; border-radius:4px;
+             transform:translateX(-50%); pointer-events:none; white-space:nowrap;
+             max-width:30%; overflow:hidden; text-overflow:ellipsis; }
+  #controls { display:flex; align-items:center; gap:10px; margin-top:10px; }
+  #play { width:34px; height:28px; border:1px solid var(--line); border-radius:5px;
+          background:#fff; cursor:pointer; font-size:12px; }
+  #scrub { flex:1; }
+  #tlabel { font-size:12px; color:var(--muted); min-width:110px; text-align:right;
+            font-variant-numeric:tabular-nums; }
+  #hint { font-size:11px; color:var(--muted); margin-top:6px; }
+</style>
+</head>
+<body>
+<h1>Test 2 pilot — deformable parts (bear) &amp; multi-object (pigs)</h1>
+<div id="subtitle">MolmoMotion-4B-H3-F30 &middot; user-clicked query points &middot; DA3 multi-view 3D lift (frame-0-anchored, calibrated vs benchmark) &middot; bear: 8 points on head/legs/torso &middot; pigs: 4+4 points across two pigs</div>
+<div id="runs"></div>
+
+<div class="panel">
+  <h2>Predicted 2D overlay (t&#8320; frame)</h2>
+  <div id="videos"></div>
+</div>
+
+<div class="panel">
+  <h2>Predicted 3D tracks (camera frame, meters) — one shared camera &amp; timeline</h2>
+  <div id="threewrap">
+    <div id="three"></div>
+    <div id="vplabels"></div>
+  </div>
+  <div id="controls">
+    <button id="play">&#9654;</button>
+    <input id="scrub" type="range" min="0" max="1000" value="0">
+    <span id="tlabel"></span>
+  </div>
+  <div id="hint">drag to orbit &middot; scroll to zoom &middot; right-drag to pan (all views move together) &middot; history in blue, prediction in magma gradient</div>
+</div>
+
+<div class="panel">
+  <h2>Input history frames (shared by all runs)</h2>
+  <div id="framestrip">
+    <figure><img id="f0"><figcaption>t&#8722;2</figcaption></figure>
+    <figure><img id="f1"><figcaption>t&#8722;1</figcaption></figure>
+    <figure><img id="f2"><figcaption>t&#8320;</figcaption></figure>
+  </div>
+</div>
+
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const MAGMA = [[0.001,0.000,0.014],[0.044,0.033,0.141],[0.123,0.062,0.302],[0.216,0.061,0.439],
+ [0.311,0.076,0.483],[0.404,0.111,0.485],[0.494,0.141,0.479],[0.588,0.169,0.464],
+ [0.684,0.196,0.433],[0.774,0.237,0.387],[0.852,0.302,0.335],[0.912,0.389,0.303],
+ [0.951,0.489,0.318],[0.975,0.591,0.375],[0.989,0.692,0.462],[0.995,0.790,0.570]];
+function magma(t){ t=Math.min(1,Math.max(0,t))*(MAGMA.length-1);
+  const i=Math.floor(t), f=t-i, a=MAGMA[i], b=MAGMA[Math.min(i+1,MAGMA.length-1)];
+  return [a[0]+f*(b[0]-a[0]), a[1]+f*(b[1]-a[1]), a[2]+f*(b[2]-a[2])]; }
+
+const container = document.getElementById('three');
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setScissorTest(true);
+container.appendChild(renderer.domElement);
+const camera = new THREE.PerspectiveCamera(45, 1, 0.001, 100);
+camera.up.set(0,-1,0);                       // camera-frame: +y is down
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+// active[i] = {name, label, meta, pred, hist, scene, predLines, dots}
+const state = { active:[], F:30, playing:false, frac:0, duration:3.6 };
+
+function fitRenderer(){
+  const w = container.clientWidth, h = container.clientHeight;
+  renderer.setSize(w, h);
+  const n = Math.max(1, state.active.length);
+  camera.aspect = (w/n)/h; camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', fitRenderer);
+
+function makeDotTexture(){
+  const cnv = document.createElement('canvas'); cnv.width=cnv.height=64;
+  const ctx = cnv.getContext('2d');
+  const grad = ctx.createRadialGradient(32,32,4,32,32,30);
+  grad.addColorStop(0,'rgba(255,255,255,1)'); grad.addColorStop(0.35,'rgba(250,120,80,0.95)');
+  grad.addColorStop(1,'rgba(250,120,80,0)');
+  ctx.fillStyle=grad; ctx.fillRect(0,0,64,64);
+  return new THREE.CanvasTexture(cnv);
+}
+const dotTex = makeDotTexture();
+
+function unionBounds(runs){
+  const lo=[1e9,1e9,1e9], hi=[-1e9,-1e9,-1e9];
+  for (const r of runs) for (let c=0;c<3;c++){
+    lo[c]=Math.min(lo[c], r.meta.bounds_min[c]); hi[c]=Math.max(hi[c], r.meta.bounds_max[c]); }
+  return [lo,hi];
+}
+
+function buildScene(run, lo, hi){
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf4f4f2);
+  const P = run.meta.P, F = run.meta.F, H = run.meta.H;
+  const ctr = lo.map((v,i)=>(v+hi[i])/2);
+  const span = Math.max(hi[0]-lo[0], hi[1]-lo[1], hi[2]-lo[2]);
+  const pad = 0.25*span;
+
+  const boxGeo = new THREE.BoxGeometry(hi[0]-lo[0]+pad, hi[1]-lo[1]+pad, hi[2]-lo[2]+pad);
+  const box = new THREE.Mesh(boxGeo, new THREE.MeshBasicMaterial(
+      {color:0x8899aa, transparent:true, opacity:0.05, depthWrite:false}));
+  box.position.set(...ctr); scene.add(box);
+  const edges = new THREE.LineSegments(new THREE.EdgesGeometry(boxGeo),
+      new THREE.LineBasicMaterial({color:0xb9c2cc}));
+  edges.position.set(...ctr); scene.add(edges);
+  const grid = new THREE.GridHelper(span+pad, 10, 0xcccccc, 0xe4e4e4);
+  grid.position.set(ctr[0], hi[1]+pad/2, ctr[2]); scene.add(grid);
+  const axes = new THREE.AxesHelper(0.12*span);
+  axes.position.set(lo[0]-pad/2, hi[1]+pad/2, lo[2]-pad/2); scene.add(axes);
+
+  run.predLines = [];
+  for (let p=0; p<P; p++){
+    const hpos = new Float32Array(H*3);
+    for (let t=0; t<H; t++) for (let c=0;c<3;c++) hpos[t*3+c] = run.hist[(t*P+p)*3+c];
+    const hg = new THREE.BufferGeometry();
+    hg.setAttribute('position', new THREE.BufferAttribute(hpos,3));
+    scene.add(new THREE.Line(hg, new THREE.LineBasicMaterial({color:0x4a7bd0})));
+
+    const ppos = new Float32Array((F+1)*3), pcol = new Float32Array((F+1)*3);
+    for (let c=0;c<3;c++) ppos[c] = run.hist[((H-1)*P+p)*3+c];
+    for (let t=0; t<F; t++) for (let c=0;c<3;c++) ppos[(t+1)*3+c] = run.pred[(p*F+t)*3+c];
+    for (let t=0; t<=F; t++){ const [r,g,b] = magma(0.15+0.73*t/F);
+      pcol[t*3]=r; pcol[t*3+1]=g; pcol[t*3+2]=b; }
+    const pg = new THREE.BufferGeometry();
+    pg.setAttribute('position', new THREE.BufferAttribute(ppos,3));
+    pg.setAttribute('color', new THREE.BufferAttribute(pcol,3));
+    pg.setDrawRange(0,1);
+    const pl = new THREE.Line(pg, new THREE.LineBasicMaterial({vertexColors:true}));
+    scene.add(pl); run.predLines.push(pl);
+  }
+  const dotGeo = new THREE.BufferGeometry();
+  dotGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(P*3),3));
+  run.dots = new THREE.Points(dotGeo, new THREE.PointsMaterial(
+      {size:0.035*span, map:dotTex, transparent:true, depthWrite:false, sizeAttenuation:true}));
+  scene.add(run.dots);
+  run.scene = scene;
+  return {ctr, span};
+}
+
+function setFrac(frac){
+  state.frac = frac;
+  const F = state.F, head = frac*F, ni = Math.floor(head);
+  for (const run of state.active){
+    const P = run.meta.P;
+    for (let p=0; p<P; p++){
+      run.predLines[p].geometry.setDrawRange(0, Math.max(1, ni+1));
+      const pos = run.predLines[p].geometry.attributes.position.array;
+      const a = Math.min(ni, F-1), b = Math.min(ni+1, F), f = head-ni;
+      const dp = run.dots.geometry.attributes.position.array;
+      for (let c=0;c<3;c++) dp[p*3+c] = pos[a*3+c] + (pos[b*3+c]-pos[a*3+c])*f;
+    }
+    run.dots.geometry.attributes.position.needsUpdate = true;
+  }
+  if (!state.playing) for (const v of videoEls())
+    if (v.duration) v.currentTime = frac*v.duration*0.999;
+  document.getElementById('scrub').value = Math.round(frac*1000);
+  document.getElementById('tlabel').textContent = `t₀ + ${head.toFixed(1)} / ${F} frames`;
+}
+
+const playBtn = document.getElementById('play');
+const scrub = document.getElementById('scrub');
+function videoEls(){ return [...document.querySelectorAll('#videos video')]; }
+playBtn.onclick = () => {
+  state.playing = !state.playing;
+  playBtn.innerHTML = state.playing ? '&#10074;&#10074;' : '&#9654;';
+  if (state.playing){
+    if (state.frac>=1){ state.frac=0; for (const v of videoEls()) v.currentTime=0; }
+    for (const v of videoEls()) v.play();
+  } else for (const v of videoEls()) v.pause();
+};
+scrub.oninput = () => { state.playing=false; playBtn.innerHTML='&#9654;';
+  for (const v of videoEls()) v.pause(); setFrac(scrub.value/1000); };
+
+function animate(ts){
+  requestAnimationFrame(animate);
+  if (state.playing && state.active.length){
+    const v0 = videoEls()[0];
+    if (v0 && v0.duration) state.frac = v0.currentTime/v0.duration;
+    if (state.frac >= 0.999){ state.frac = 1; state.playing=false;
+      for (const v of videoEls()) v.pause(); playBtn.innerHTML='&#9654;'; }
+    setFrac(state.frac);
+  }
+  controls.update();
+  const w = container.clientWidth, h = container.clientHeight;
+  const n = state.active.length;
+  for (let i=0; i<n; i++){
+    const x0 = Math.floor(i*w/n), x1 = Math.floor((i+1)*w/n);
+    renderer.setViewport(x0, 0, x1-x0, h);
+    renderer.setScissor(x0, 0, x1-x0, h);
+    renderer.render(state.active[i].scene, camera);
+  }
+}
+
+async function fetchRun(r){
+  const base = `data/${r.name}`;
+  const [meta, pred, hist] = await Promise.all([
+    fetch(`${base}/meta.json`).then(x=>x.json()),
+    fetch(`${base}/tracks_pred.bin`).then(x=>x.arrayBuffer()).then(b=>new Float32Array(b)),
+    fetch(`${base}/tracks_hist.bin`).then(x=>x.arrayBuffer()).then(b=>new Float32Array(b)),
+  ]);
+  return {...r, meta, pred, hist};
+}
+
+function setVideos(runs){
+  const div = document.getElementById('videos');
+  div.innerHTML = '';
+  for (const r of runs){
+    const cell = document.createElement('div'); cell.className='vcell';
+    const cap = document.createElement('div'); cap.className='cap';
+    cap.textContent = `"${r.meta.action}"`; cap.title = r.meta.action;
+    const v = document.createElement('video');
+    v.muted = true; v.playsInline = true; v.preload = 'auto';
+    v.src = `data/${r.name}/overlay_2d.mp4`;
+    cell.appendChild(cap); cell.appendChild(v); div.appendChild(cell);
+  }
+}
+
+function setLabels(runs){
+  const wrap = document.getElementById('vplabels');
+  wrap.innerHTML = '';
+  const n = runs.length;
+  runs.forEach((r,i)=>{
+    const el = document.createElement('div'); el.className='vplabel';
+    el.style.left = `${(i+0.5)*100/n}%`;
+    el.textContent = r.label || r.name;
+    wrap.appendChild(el);
+  });
+}
+
+async function show(runRefs){
+  const runs = await Promise.all(runRefs.map(fetchRun));
+  state.active = runs;
+  state.F = runs[0].meta.F;
+  const [lo,hi] = unionBounds(runs);
+  let view = null;
+  for (const r of runs) view = buildScene(r, lo, hi);
+  camera.position.set(view.ctr[0]+0.9*view.span, view.ctr[1]-0.55*view.span,
+                      view.ctr[2]-1.25*view.span);
+  controls.target.set(...view.ctr); controls.update();
+  setVideos(runs); setLabels(runs);
+  const f = `data/${runs[0].name}`;
+  document.getElementById('f0').src = `${f}/frame_t-2.jpg`;
+  document.getElementById('f1').src = `${f}/frame_t-1.jpg`;
+  document.getElementById('f2').src = `${f}/frame_t+0.jpg`;
+  state.playing = false; playBtn.innerHTML='&#9654;';
+  fitRenderer(); setFrac(0);
+}
+
+async function init(){
+  const tabs = await (await fetch('data/t2pilot_index.json')).json();
+  const bar = document.getElementById('runs');
+  tabs.forEach((t,i)=>{
+    const b = document.createElement('button');
+    b.textContent = t.label;
+    b.onclick = ()=>{ bar.querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+                      b.classList.add('active'); show(t.refs); };
+    bar.appendChild(b);
+    if (i===0){ b.classList.add('active'); show(t.refs); }
+  });
+  requestAnimationFrame(animate);
+}
+init();
+</script>
+</body>
+</html>
