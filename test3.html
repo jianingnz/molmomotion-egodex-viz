@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tests 1+3 — full-run results (DAVIS, 87 clips)</title>
+<style>
+ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:#fafafa;color:#333;padding:18px 22px;max-width:900px}
+ h1{font-size:17px;font-weight:600;margin-bottom:2px} #sub{font-size:13px;color:#888;margin-bottom:14px}
+ img{max-width:100%;border:1px solid #e2e2e2;border-radius:8px;background:#fff}
+ table{border-collapse:collapse;margin:14px 0;font-size:14px}
+ th,td{border:1px solid #e2e2e2;padding:6px 12px;text-align:right} th{background:#fff} td:first-child,th:first-child{text-align:left}
+ p{font-size:13px;line-height:1.5;margin:10px 0}
+</style></head><body>
+<h1>Tests 1 + 3 — language ablations &amp; error-vs-horizon (full runs)</h1>
+<div id="sub">PointMotionBench-DAVIS &middot; 87 clips &middot; 24 points/clip &middot; fixed t&#8320; &middot; MolmoMotion-4B-H3-F30</div>
+<table>
+<tr><th>Condition</th><th>ADE &darr;</th><th>FDE &darr;</th><th>PWT &uarr;</th></tr>
+<tr><td>A — full model</td><td>0.877</td><td>1.733</td><td>0.174</td></tr>
+<tr><td>C — black history frames (language-only)</td><td>1.553</td><td>3.152</td><td>0.090</td></tr>
+<tr><td>D2 — direction-reversed captions</td><td>0.767</td><td>1.466</td><td>0.171</td></tr>
+</table>
+<img src="data/horizon_curve.png" alt="mean 3D error vs forecast horizon">
+<p><b>Reading:</b> removing vision (C) nearly doubles ADE and degrades toward the trivial baselines,
+while contradictory language (D2) leaves accuracy essentially unchanged — the model follows visual
+dynamics rather than caption templates. The model beats static and constant-velocity extrapolation
+by ~2.6&times; at the 30-frame horizon.</p>
+</body></html>
