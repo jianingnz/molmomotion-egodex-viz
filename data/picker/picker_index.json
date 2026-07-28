@@ -89,5 +89,544 @@
   "h": 480,
   "t0": 2,
   "caption": "a dog walks to the right on grass"
+ },
+ {
+  "clip": "bike-packing",
+  "w": 910,
+  "h": 480,
+  "t0": 2,
+  "caption": "a person rotates the bike and inspects it carefully"
+ },
+ {
+  "clip": "bmx-bumps",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a bike rider rides a bmx bike on a dirt track"
+ },
+ {
+  "clip": "bmx-trees",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a bike rider rides the bike along the road"
+ },
+ {
+  "clip": "boat",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a boat sails to the left along the river"
+ },
+ {
+  "clip": "boxing-fisheye",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "two boxers compete in a boxing game with a referee on the side"
+ },
+ {
+  "clip": "breakdance-flare",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a breakdancer performs flares"
+ },
+ {
+  "clip": "bus",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a bus goes to the right along the road"
+ },
+ {
+  "clip": "car-roundabout",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a dark gray car drives through a roundabout"
+ },
+ {
+  "clip": "car-shadow",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a silver car drive to the left"
+ },
+ {
+  "clip": "car-turn",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a silver car follows the road and slowly turns to the right"
+ },
+ {
+  "clip": "cat-girl",
+  "w": 910,
+  "h": 480,
+  "t0": 2,
+  "caption": "a girl holds a cat and smiles"
+ },
+ {
+  "clip": "classic-car",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a classic car drives to the left"
+ },
+ {
+  "clip": "color-run",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a person sprays color in a running race"
+ },
+ {
+  "clip": "cows",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a cow walks slowly forward"
+ },
+ {
+  "clip": "crossing",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "two persons crosses the road while a car drives in the opposite direction in the back"
+ },
+ {
+  "clip": "dance-jump",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "the dancer jumps"
+ },
+ {
+  "clip": "dancing",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "three persons dance in front of the crowd"
+ },
+ {
+  "clip": "disc-jockey",
+  "w": 1138,
+  "h": 480,
+  "t0": 2,
+  "caption": "two persons extend their arms"
+ },
+ {
+  "clip": "dog",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a dog walks on the yellow grass"
+ },
+ {
+  "clip": "dog-agility",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "the dog jumps and weaves between poles"
+ },
+ {
+  "clip": "dogs-jump",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "two dogs jump for treat around a person"
+ },
+ {
+  "clip": "dogs-scale",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "put a dog on the weight"
+ },
+ {
+  "clip": "drift-chicane",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a racing car drifts through the chicane"
+ },
+ {
+  "clip": "drift-straight",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a racing car drifts on a straight track"
+ },
+ {
+  "clip": "drift-turn",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a racing car drifts around a turn"
+ },
+ {
+  "clip": "drone",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "the drone falls to the ground. then one person picks it up"
+ },
+ {
+  "clip": "flamingo",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a flamingo dips its beak into the water while walking to the right"
+ },
+ {
+  "clip": "gold-fish",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "several fishes swims in the water"
+ },
+ {
+  "clip": "hike",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a person is hiking and walks to the right"
+ },
+ {
+  "clip": "hockey",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a hockey player prepares and shoots"
+ },
+ {
+  "clip": "horsejump-high",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a rider on a horse jumps over a high obstacle"
+ },
+ {
+  "clip": "horsejump-low",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a rider on a horse jumps over a low obstacle"
+ },
+ {
+  "clip": "india",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "women with Indian costume walk on the street"
+ },
+ {
+  "clip": "kite-surf",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a kite surfer surfs to the right"
+ },
+ {
+  "clip": "kite-walk",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "the surfer backs up"
+ },
+ {
+  "clip": "koala",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a koala moves onto a branch and holds onto it"
+ },
+ {
+  "clip": "lab-coat",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "three women students in lab coat standing looks at the camera"
+ },
+ {
+  "clip": "lady-running",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "an old lady runs forward holding a note"
+ },
+ {
+  "clip": "loading",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a man moves a tv box to the cart"
+ },
+ {
+  "clip": "longboard",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a man rides a skateboard and waves while a cyclist approaches from the opposite direction"
+ },
+ {
+  "clip": "lucia",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a lady walks to the right"
+ },
+ {
+  "clip": "mallard-fly",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a mallard starts to fly"
+ },
+ {
+  "clip": "mallard-water",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a mallard swims in the water"
+ },
+ {
+  "clip": "mbike-trick",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a motorbike rider performs a burnout, spinning the tire and producing smoke"
+ },
+ {
+  "clip": "miami-surf",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "several surfers surf in the ocean"
+ },
+ {
+  "clip": "motocross-bumps",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a motorbike rider on a motorbike jumps through the bumps"
+ },
+ {
+  "clip": "motocross-jump",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a motorbike rider on a motorbike jumps through the bumps"
+ },
+ {
+  "clip": "motorbike",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a motorbike with two passengers drives to the right"
+ },
+ {
+  "clip": "night-race",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "two racing cars race against each other"
+ },
+ {
+  "clip": "paragliding",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a paraglider flys"
+ },
+ {
+  "clip": "paragliding-launch",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a paraglider runs forward and launch the paragliding"
+ },
+ {
+  "clip": "parkour",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a person is doing parkour"
+ },
+ {
+  "clip": "planes-water",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "airplane slowly moves forward"
+ },
+ {
+  "clip": "rallye",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a rally car drives forward"
+ },
+ {
+  "clip": "rhino",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a rhino walks to the left"
+ },
+ {
+  "clip": "rollerblade",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a rollerblader rumps"
+ },
+ {
+  "clip": "schoolgirls",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a girl moves to the right while others stand"
+ },
+ {
+  "clip": "scooter-black",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a rider rides the scooter to the left"
+ },
+ {
+  "clip": "scooter-board",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a person sits on a cart and drives it"
+ },
+ {
+  "clip": "scooter-gray",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a rider rides the scooter to the left"
+ },
+ {
+  "clip": "sheep",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "several sheeps walk"
+ },
+ {
+  "clip": "shooting",
+  "w": 1152,
+  "h": 480,
+  "t0": 2,
+  "caption": "a soldier slides down the rope while shooting"
+ },
+ {
+  "clip": "skate-park",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a skater skates in a skate park"
+ },
+ {
+  "clip": "snowboard",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a snowboarder does a flip"
+ },
+ {
+  "clip": "soapbox",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "two drivers drive a self-made cart through a bump"
+ },
+ {
+  "clip": "soccerball",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a soccer rolls from right to left"
+ },
+ {
+  "clip": "stroller",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a person moves the stroller to the right"
+ },
+ {
+  "clip": "stunt",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a person slides down the skate park on a scooter"
+ },
+ {
+  "clip": "surf",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a person surfs to the right"
+ },
+ {
+  "clip": "swing",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a lady swings on a swing"
+ },
+ {
+  "clip": "tennis",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a tennis player does a forehand hit"
+ },
+ {
+  "clip": "tractor-sand",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a tractor drives around an obstacle on sand"
+ },
+ {
+  "clip": "train",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a toy train turns left along the track"
+ },
+ {
+  "clip": "tuk-tuk",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "three persons sit on a car"
+ },
+ {
+  "clip": "upside-down",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "two persons ride on a rollercoaster"
+ },
+ {
+  "clip": "varanus-cage",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a varanus crawls on the branch"
+ },
+ {
+  "clip": "walking",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "two persons walk down the street"
  }
 ]
