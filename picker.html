@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Query-point picker — Tests 2 &amp; 5</title>
+<style>
+ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:#fafafa;color:#333;padding:18px 22px;max-width:980px}
+ h1{font-size:17px;font-weight:600;margin-bottom:2px} #sub{font-size:13px;color:#888;margin-bottom:12px}
+ #clips button, .grp, #ctrl button{font-size:13px;padding:4px 12px;margin:0 6px 6px 0;border:1px solid #e2e2e2;border-radius:5px;background:#fff;cursor:pointer}
+ #clips button.active{background:#333;color:#fff;border-color:#333}
+ .grp.active{color:#fff;border-color:transparent}
+ #wrap{position:relative;display:inline-block;margin:6px 0}
+ #img{display:block;max-width:100%;border-radius:6px}
+ #cv{position:absolute;left:0;top:0;cursor:crosshair}
+ #caption{font-size:13px;color:#555;margin:4px 0 8px}
+ textarea{width:100%;height:130px;font-family:ui-monospace,Menlo,monospace;font-size:12px;border:1px solid #e2e2e2;border-radius:6px;padding:8px;background:#fff}
+ #hint{font-size:12px;color:#888;margin:6px 0}
+</style>
+</head>
+<body>
+<h1>Query-point picker</h1>
+<div id="sub">Click points on the t&#8320; frame. Choose a group first (object A / object B / background). Right-click a marker to delete. Then copy the JSON at the bottom and paste it back to Claude.</div>
+<div id="clips"></div>
+<div id="caption"></div>
+<div>
+  <button class="grp" data-g="objA" style="background:#2a78d6">object A</button>
+  <button class="grp" data-g="objB" style="background:#eb6834">object B</button>
+  <button class="grp" data-g="bg"   style="background:#1baf7a">background</button>
+  <span id="ctrl">
+    <button id="undo">undo</button>
+    <button id="clear">clear clip</button>
+    <button id="copy">copy JSON</button>
+  </span>
+</div>
+<div id="wrap"><img id="img"><canvas id="cv"></canvas></div>
+<div id="hint">Coordinates are stored in ORIGINAL pixel space (854&times;480) regardless of display size. Selections persist per clip in this browser (localStorage).</div>
+<textarea id="out" readonly></textarea>
+
+<script>
+const S = { clips: [], cur: null, group: "objA",
+            data: JSON.parse(localStorage.getItem("mm_picker") || "{}") };
+const GC = { objA: "#2a78d6", objB: "#eb6834", bg: "#1baf7a" };
+
+const img = document.getElementById('img'), cv = document.getElementById('cv'),
+      ctx = cv.getContext('2d');
+
+function save(){ localStorage.setItem("mm_picker", JSON.stringify(S.data)); dump(); }
+
+function dump(){
+  const out = {};
+  for (const [clip, pts] of Object.entries(S.data))
+    if (pts.length) out[clip] = { t0: meta(clip).t0, points: pts };
+  document.getElementById('out').value = JSON.stringify(out, null, 1);
+}
+function meta(clip){ return S.clips.find(c => c.clip === clip); }
+
+function draw(){
+  const m = meta(S.cur);
+  cv.width = img.clientWidth; cv.height = img.clientHeight;
+  const sx = img.clientWidth / m.w, sy = img.clientHeight / m.h;
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  (S.data[S.cur] || []).forEach((p, i) => {
+    const x = p.u * sx, y = p.v * sy;
+    ctx.beginPath(); ctx.arc(x, y, 7, 0, 7);
+    ctx.fillStyle = GC[p.group]; ctx.fill();
+    ctx.lineWidth = 1.5; ctx.strokeStyle = "#fff"; ctx.stroke();
+    ctx.fillStyle = "#fff"; ctx.font = "bold 9px sans-serif";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(i, x, y);
+  });
+}
+
+function show(clip){
+  S.cur = clip;
+  const m = meta(clip);
+  document.querySelectorAll('#clips button').forEach(b =>
+    b.classList.toggle('active', b.textContent === clip));
+  document.getElementById('caption').textContent = `caption: "${m.caption}"`;
+  img.src = `data/picker/${clip}_t0.jpg`;
+  img.onload = draw;
+}
+
+cv.addEventListener('click', e => {
+  const m = meta(S.cur), r = cv.getBoundingClientRect();
+  const u = (e.clientX - r.left) * m.w / cv.width;
+  const v = (e.clientY - r.top) * m.h / cv.height;
+  (S.data[S.cur] = S.data[S.cur] || []).push(
+    { u: Math.round(u * 10) / 10, v: Math.round(v * 10) / 10, group: S.group });
+  save(); draw();
+});
+cv.addEventListener('contextmenu', e => {
+  e.preventDefault();
+  const m = meta(S.cur), r = cv.getBoundingClientRect();
+  const u = (e.clientX - r.left) * m.w / cv.width;
+  const v = (e.clientY - r.top) * m.h / cv.height;
+  const pts = S.data[S.cur] || [];
+  let best = -1, bd = 1e9;
+  pts.forEach((p, i) => { const d = (p.u - u) ** 2 + (p.v - v) ** 2; if (d < bd){ bd = d; best = i; } });
+  if (best >= 0 && bd < 400){ pts.splice(best, 1); save(); draw(); }
+});
+document.querySelectorAll('.grp').forEach(b => {
+  b.onclick = () => { S.group = b.dataset.g;
+    document.querySelectorAll('.grp').forEach(x => x.classList.toggle('active', x === b)); };
+});
+document.querySelector('.grp').classList.add('active');
+document.getElementById('undo').onclick = () => {
+  (S.data[S.cur] || []).pop(); save(); draw(); };
+document.getElementById('clear').onclick = () => {
+  S.data[S.cur] = []; save(); draw(); };
+document.getElementById('copy').onclick = () =>
+  navigator.clipboard.writeText(document.getElementById('out').value);
+window.addEventListener('resize', () => S.cur && draw());
+
+fetch('data/picker/picker_index.json').then(r => r.json()).then(clips => {
+  S.clips = clips;
+  const bar = document.getElementById('clips');
+  clips.forEach((c, i) => {
+    const b = document.createElement('button');
+    b.textContent = c.clip;
+    b.onclick = () => show(c.clip);
+    bar.appendChild(b);
+    if (i === 0) show(c.clip);
+  });
+  dump();
+});
+</script>
+</body>
+</html>

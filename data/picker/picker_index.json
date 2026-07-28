@@ -1,0 +1,86 @@
+[
+ {
+  "clip": "camel",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a camel walks to the right and then walks back"
+ },
+ {
+  "clip": "elephant",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "an elephant slowly walks"
+ },
+ {
+  "clip": "dance-twirl",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "the dancer performs a twirl."
+ },
+ {
+  "clip": "breakdance",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a dancer performs breakdancing in front of a crowd"
+ },
+ {
+  "clip": "blackswan",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a black swan swims to the right"
+ },
+ {
+  "clip": "goat",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a goat walks along the cliff"
+ },
+ {
+  "clip": "dog-gooses",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "the dog chases the 4 geese"
+ },
+ {
+  "clip": "judo",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a judo master flips another practitioner over"
+ },
+ {
+  "clip": "kid-football",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a kid kicks soccer"
+ },
+ {
+  "clip": "lindy-hop",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "several groups of dancers dance in the ball room"
+ },
+ {
+  "clip": "pigs",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "little pigs walks to the big pig"
+ },
+ {
+  "clip": "libby",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a dog walks to the right on grass"
+ }
+]
