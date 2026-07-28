@@ -1,5 +1,12 @@
 [
  {
+  "clip": "bear",
+  "w": 854,
+  "h": 480,
+  "t0": 2,
+  "caption": "a brown bear walks to the left"
+ },
+ {
   "clip": "camel",
   "w": 854,
   "h": 480,
