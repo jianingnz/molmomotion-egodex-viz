@@ -1,0 +1,19 @@
+[
+ {
+  "label": "bear: static background points",
+  "refs": [
+   {
+    "name": "t5p_bear_bg_action",
+    "label": "8 bg pts + action caption"
+   },
+   {
+    "name": "t5p_bear_bg_neutral",
+    "label": "8 bg pts + neutral caption"
+   },
+   {
+    "name": "t5p_bear_mixed_action",
+    "label": "4 obj + 4 bg, action caption"
+   }
+  ]
+ }
+]
