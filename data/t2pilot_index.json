@@ -1,10 +1,37 @@
 [
  {
-  "label": "bear (deformable, 8 parts)",
+  "label": "bear (deformable)",
   "refs": [
    {
     "name": "t2p_bear_objA",
-    "label": "prediction (8 part points)"
+    "label": "8 part points"
+   }
+  ]
+ },
+ {
+  "label": "lucia (deformable)",
+  "refs": [
+   {
+    "name": "t2p_lucia_objA",
+    "label": "8 part points"
+   }
+  ]
+ },
+ {
+  "label": "kite-walk (deformable)",
+  "refs": [
+   {
+    "name": "t2p_kite-walk_objA",
+    "label": "8 part points"
+   }
+  ]
+ },
+ {
+  "label": "flamingo (deformable)",
+  "refs": [
+   {
+    "name": "t2p_flamingo_objA",
+    "label": "8 part points"
    }
   ]
  },
@@ -21,6 +48,40 @@
    },
    {
     "name": "t2p_pigs_mixed",
+    "label": "mixed 4A+4B (Tier 1)"
+   }
+  ]
+ },
+ {
+  "label": "crossing (multi-object)",
+  "refs": [
+   {
+    "name": "t2p_crossing_objA",
+    "label": "person A (4, padded)"
+   },
+   {
+    "name": "t2p_crossing_objB",
+    "label": "person B (4, padded)"
+   },
+   {
+    "name": "t2p_crossing_mixed",
+    "label": "mixed 4A+4B (Tier 1)"
+   }
+  ]
+ },
+ {
+  "label": "boxing-fisheye (multi-object)",
+  "refs": [
+   {
+    "name": "t2p_boxing-fisheye_objA",
+    "label": "boxer A (4, padded)"
+   },
+   {
+    "name": "t2p_boxing-fisheye_objB",
+    "label": "boxer B (4, padded)"
+   },
+   {
+    "name": "t2p_boxing-fisheye_mixed",
     "label": "mixed 4A+4B (Tier 1)"
    }
   ]
