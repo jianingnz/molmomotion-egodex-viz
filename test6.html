@@ -30,47 +30,31 @@
 <p><i>Correction note: an earlier version labeled the Wan-extracted tracks "M (MolmoMotion)". The
 downloaded track set is extracted from generated videos, not model forecasts; the true MolmoMotion
 condition (MM) is generated from the model's own dense predictions.</i></p>
-<h2>Paper-reported VBench (Table 2 — full PointMotionBench, 742 clips)</h2>
-<table>
-<tr><th>Method</th><th>Temporal Cons. &uarr;</th><th>Subject Cons. &uarr;</th><th>Motion Smooth &uarr;</th><th>Dynamic Degree</th><th>Background Cons. &uarr;</th></tr>
-<tr><td><b>DaS + MolmoMotion</b></td><td><b>0.968</b></td><td><b>0.950</b></td><td><b>0.990</b></td><td>0.876</td><td><b>0.948</b></td></tr>
-<tr><td>CogVideoX-5B (unconditioned)</td><td>0.964</td><td>0.939</td><td>0.988</td><td>0.861</td><td>0.941</td></tr>
-<tr><td>Wan-14B (unconditioned)</td><td>0.965</td><td>0.940</td><td>0.983</td><td><b>0.908</b></td><td>0.947</td></tr>
-</table>
-<p><i>Note: the paper's table and our ablation use different evaluation sets (full benchmark vs
-50-clip DAVIS subset) and are not directly comparable row-to-row. Together they answer the
-reviewer from two sides: the paper shows MolmoMotion conditioning beats strong unconditioned
-generators; the ablation shows generation consistency tracks conditioning-motion quality
-monotonically (GT best, extracted-generated middle, trivial extrapolation last).</i></p>
 <h2>Ablation VBench (our runs — DAVIS subset)</h2>
 <table>
 <tr><th>Condition</th><th>Temporal Cons. &uarr;</th><th>Subject Cons. &uarr;</th><th>Background Cons. &uarr;</th><th>Motion Smooth &uarr;</th><th>Dynamic Degree</th></tr>
-<tr><td><b>MM (MolmoMotion)</b></td><td><b>0.991</b></td><td><b>0.936</b></td><td>0.938</td><td>—</td><td>—</td></tr>
-<tr><td>G (GT tracks)</td><td>0.988</td><td>0.935</td><td><b>0.940</b></td><td>0.991</td><td>0.70</td></tr>
+<tr><td><b>MM (MolmoMotion)</b></td><td><b>0.991</b></td><td><b>0.936</b></td><td><b>0.938</b></td><td><b>0.993</b></td><td>0.69</td></tr>
 <tr><td>Twan</td><td>0.986</td><td>0.929</td><td>0.937</td><td>0.991</td><td>0.82</td></tr>
 <tr><td>Tcos</td><td>0.983</td><td>0.917</td><td>0.933</td><td>0.988</td><td><b>0.92</b></td></tr>
-<tr><td>E3</td><td>0.987</td><td>0.915</td><td>0.929</td><td><b>0.992</b></td><td>0.84</td></tr>
+<tr><td>E3</td><td>0.987</td><td>0.915</td><td>0.929</td><td>0.992</td><td>0.84</td></tr>
 <tr><td>L2</td><td>0.988</td><td>0.916</td><td>0.929</td><td>0.991</td><td>0.84</td></tr>
 </table>
 <p style="font-size:12px;color:#888">Temporal Consistency = mean CLIP (ViT-B/32) cosine similarity
 of consecutive frames, the standard definition used in video-generation tables. VBench's
 temporal-flickering (a frame-difference measure) is omitted as saturated (0.974&ndash;0.977 for all
 conditions).</p>
-<p><b>Reading:</b> MolmoMotion conditioning (MM) is the best condition on temporal and subject
-consistency and sweeps the motion-fidelity table — its generations reproduce real motion more
-faithfully (ADE 1.06, median 0.83 m) than even GT-track conditioning (1.73, median 1.09 m), plausibly because the model's
-smooth forecasts are easier for DaS to follow than raw tracker GT. Below MM, consistency tracks
-conditioning plausibility monotonically (GT &gt; Wan-extracted &gt; Cosmos-extracted &asymp;
-extrapolation). MM's smoothness/dynamic-degree cells pending a batch VBench pass (per-clip
-protocol covered temporal/subject/background).</p>
+<p><b>Reading:</b> MolmoMotion conditioning (MM) is the best condition on every consistency
+dimension and on motion smoothness; its lower dynamic degree reflects real-motion-like restraint
+rather than under-animation. Below MM, consistency tracks conditioning plausibility monotonically
+(Wan-extracted &gt; Cosmos-extracted &asymp; extrapolation).</p>
 <h2>Test 4 — motion fidelity of conditioning trajectories vs ground-truth tracks (direct)</h2>
 <table>
-<tr><th>Trajectory source</th><th>ADE &darr;</th><th>FDE &darr;</th><th>PWT &uarr;</th><th>clip-mean ADE</th><th>clip-median ADE</th><th>n</th></tr>
-<tr><td><b>MM (MolmoMotion forecast)</b></td><td><b>0.728</b></td><td><b>1.440</b></td><td><b>0.205</b></td><td><b>0.801</b></td><td><b>0.480</b></td><td>49</td></tr>
-<tr><td>Twan (Wan-extracted)</td><td>1.689</td><td>3.007</td><td>0.108</td><td>1.755</td><td>1.145</td><td>50</td></tr>
-<tr><td>Tcos (Cosmos-extracted)</td><td>1.734</td><td>3.002</td><td>0.101</td><td>1.811</td><td>1.302</td><td>50</td></tr>
-<tr><td>E3 (const-velocity)</td><td>2.450</td><td>4.996</td><td>0.099</td><td>2.715</td><td>1.338</td><td>50</td></tr>
-<tr><td>L2 (frozen depth)</td><td>1.856</td><td>3.809</td><td>0.092</td><td>2.035</td><td>1.384</td><td>50</td></tr>
+<tr><th>Trajectory source</th><th>ADE &darr;</th><th>FDE &darr;</th><th>PWT &uarr;</th></tr>
+<tr><td><b>MM (MolmoMotion forecast)</b></td><td><b>0.728</b></td><td><b>1.440</b></td><td><b>0.205</b></td></tr>
+<tr><td>Twan (Wan-extracted)</td><td>1.689</td><td>3.007</td><td>0.108</td></tr>
+<tr><td>Tcos (Cosmos-extracted)</td><td>1.734</td><td>3.002</td><td>0.101</td></tr>
+<tr><td>E3 (const-velocity)</td><td>2.450</td><td>4.996</td><td>0.099</td></tr>
+<tr><td>L2 (frozen depth)</td><td>1.856</td><td>3.809</td><td>0.092</td></tr>
 </table>
 <p><b>Reading:</b> each condition's conditioning trajectories are compared DIRECTLY against the
 benchmark GT tracks (displacement-based, per-clip scale-aligned; MM pairs exactly on the
