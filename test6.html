@@ -44,6 +44,24 @@ condition (MM) is generated from the model's own dense predictions.</i></p>
 Wan-extracted, with Cosmos-extracted (wildest motion, dynamic 0.92) down at extrapolation level.
 Flicker/smoothness are saturated (generator property). Motion-fidelity ADE/FDE/PWT vs GT tracks
 (Test 4) joins this table when the MM chain completes.</p>
+<h2>Test 4 — motion fidelity &amp; adherence (displacement ADE, meters; clip-medians)</h2>
+<table>
+<tr><th>Condition</th><th>Fidelity vs GT (median)</th><th>Fidelity PWT &uarr;</th><th>Adherence to conditioning (median)</th><th>n clips</th></tr>
+<tr><td>noise floor — real videos through the same pipeline</td><td><b>0.375</b></td><td>0.214</td><td>—</td><td>89</td></tr>
+<tr><td>G (GT tracks)</td><td>1.092</td><td>0.121</td><td>1.092</td><td>50</td></tr>
+<tr><td>MM (MolmoMotion)</td><td colspan="4" style="text-align:center;color:#888">running…</td></tr>
+<tr><td>E3 (const-velocity)</td><td>1.070</td><td>0.122</td><td>0.960</td><td>50</td></tr>
+<tr><td>Twan</td><td>1.178</td><td>0.109</td><td><b>0.822</b></td><td>50</td></tr>
+<tr><td>L2 (frozen depth)</td><td>1.483</td><td>0.106</td><td>0.953</td><td>50</td></tr>
+<tr><td>Tcos</td><td>1.527</td><td>0.105</td><td>0.981</td><td>50</td></tr>
+</table>
+<p><b>Reading:</b> metrics are displacement-based (global SLAM anchor drift cancelled) with per-clip
+scale alignment; the floor row is the pipeline's own error on real videos. Two observations pending
+MM: (i) even GT-conditioned generations sit ~0.7 m above the floor — DaS follows conditioning
+imperfectly, bounding what any trajectory source can achieve; (ii) short-horizon constant-velocity
+is a strong fidelity baseline over a 2-second window (E3 &asymp; G) even though its VBench
+consistency is clearly worse — fidelity and generation quality measure different failure modes,
+which is why both tables are reported.</p>
 <h2>Pilot sample (bear_1): generated result + its conditioning tracking-video</h2>
 <div class="grid">
   <div class="cell"><h3>Twan — result</h3><video src="data/t6pilot/M_result.mp4" muted loop controls playsinline></video></div>
