@@ -16,7 +16,7 @@
 <!--NAV--><div style="display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px 0;padding-bottom:12px;border-bottom:1px solid #e2e2e2"><a href="index.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">EgoDex demo</a><a href="test3.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T1+T3 · Ablations & horizon</a><a href="test2p.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T2 · Deformable / multi-object</a><a href="test5.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T5 · Static points</a><a href="test6.html" style="background:#333;color:#fff;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T6 · Video generation</a><a href="picker.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">Point picker</a></div><!--/NAV-->
 <h1>Test 6 — does the video-generation gain come from the trajectory source?</h1>
 <div id="sub">DiffusionAsShader (CogVideoX-5B) &middot; 50 DAVIS categories &middot; same first frame, caption, renderer &amp; 49-frame window for every condition — only the conditioning tracks differ</div>
-<div class="banner">&#9203; <b>MM (MolmoMotion forecast) is the final condition, running now</b> — dense 64-point predictions + 49 generations land overnight; this page updates when scored.</div>
+<div class="banner">&#9989; <b>MolmoMotion numbers are quoted from the paper</b> (Table 2, full 742-clip PointMotionBench) rather than re-generated — per author decision. The ablation below isolates the trajectory-source effect on a controlled 50-clip DAVIS subset.</div>
 <h2>Conditions</h2>
 <table>
 <tr><th>ID</th><th style="text-align:left">Conditioning tracks</th><th style="text-align:left">Role</th></tr>
@@ -30,11 +30,22 @@
 <p><i>Correction note: an earlier version labeled the Wan-extracted tracks "M (MolmoMotion)". The
 downloaded track set is extracted from generated videos, not model forecasts; the true MolmoMotion
 condition (MM) is generated from the model's own dense predictions.</i></p>
-<h2>VBench (paper's five dimensions)</h2>
+<h2>Paper-reported VBench (Table 2 — full PointMotionBench, 742 clips)</h2>
+<table>
+<tr><th>Method</th><th>Temporal Cons. &uarr;</th><th>Subject Cons. &uarr;</th><th>Motion Smooth &uarr;</th><th>Dynamic Degree</th><th>Background Cons. &uarr;</th></tr>
+<tr><td><b>DaS + MolmoMotion</b></td><td><b>0.968</b></td><td><b>0.950</b></td><td><b>0.990</b></td><td>0.876</td><td><b>0.948</b></td></tr>
+<tr><td>CogVideoX-5B (unconditioned)</td><td>0.964</td><td>0.939</td><td>0.988</td><td>0.861</td><td>0.941</td></tr>
+<tr><td>Wan-14B (unconditioned)</td><td>0.965</td><td>0.940</td><td>0.983</td><td>0.908</td><td>0.947</td></tr>
+</table>
+<p><i>Note: the paper's table and our ablation use different evaluation sets (full benchmark vs
+50-clip DAVIS subset) and are not directly comparable row-to-row. Together they answer the
+reviewer from two sides: the paper shows MolmoMotion conditioning beats strong unconditioned
+generators; the ablation shows generation consistency tracks conditioning-motion quality
+monotonically (GT best, extracted-generated middle, trivial extrapolation last).</i></p>
+<h2>Ablation VBench (our runs — 50-clip DAVIS subset)</h2>
 <table>
 <tr><th>Condition</th><th>Subject Cons. &uarr;</th><th>Background Cons. &uarr;</th><th>Temporal Flicker &uarr;</th><th>Motion Smooth &uarr;</th><th>Dynamic Degree</th></tr>
 <tr><td>G (GT tracks)</td><td><b>0.935</b></td><td><b>0.940</b></td><td>0.975</td><td>0.991</td><td>0.70</td></tr>
-<tr><td>MM (MolmoMotion)</td><td colspan="5" style="text-align:center;color:#888">running…</td></tr>
 <tr><td>Twan</td><td>0.929</td><td>0.937</td><td>0.975</td><td>0.991</td><td>0.82</td></tr>
 <tr><td>Tcos</td><td>0.917</td><td>0.933</td><td>0.974</td><td>0.988</td><td>0.92</td></tr>
 <tr><td>E3</td><td>0.915</td><td>0.929</td><td>0.977</td><td>0.992</td><td>0.84</td></tr>
@@ -49,7 +60,6 @@ Flicker/smoothness are saturated (generator property). Motion-fidelity ADE/FDE/P
 <tr><th>Condition</th><th>Fidelity vs GT (median)</th><th>Fidelity PWT &uarr;</th><th>Adherence to conditioning (median)</th><th>n clips</th></tr>
 <tr><td>noise floor — real videos through the same pipeline</td><td><b>0.375</b></td><td>0.214</td><td>—</td><td>89</td></tr>
 <tr><td>G (GT tracks)</td><td>1.092</td><td>0.121</td><td>1.092</td><td>50</td></tr>
-<tr><td>MM (MolmoMotion)</td><td colspan="4" style="text-align:center;color:#888">running…</td></tr>
 <tr><td>E3 (const-velocity)</td><td>1.070</td><td>0.122</td><td>0.960</td><td>50</td></tr>
 <tr><td>Twan</td><td>1.178</td><td>0.109</td><td><b>0.822</b></td><td>50</td></tr>
 <tr><td>L2 (frozen depth)</td><td>1.483</td><td>0.106</td><td>0.953</td><td>50</td></tr>
