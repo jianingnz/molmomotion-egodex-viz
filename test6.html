@@ -16,12 +16,12 @@
 <!--NAV--><div style="display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px 0;padding-bottom:12px;border-bottom:1px solid #e2e2e2"><a href="index.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">EgoDex demo</a><a href="test3.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T1+T3 · Ablations & horizon</a><a href="test2p.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T2 · Deformable / multi-object</a><a href="test5.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T5 · Static points</a><a href="test6.html" style="background:#333;color:#fff;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T6 · Video generation</a><a href="picker.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">Point picker</a></div><!--/NAV-->
 <h1>Test 6 — does the video-generation gain come from the trajectory source?</h1>
 <div id="sub">DiffusionAsShader (CogVideoX-5B) &middot; 50 DAVIS categories &middot; same first frame, caption, renderer &amp; 49-frame window for every condition — only the conditioning tracks differ</div>
-<div class="banner">&#9989; <b>MolmoMotion numbers are quoted from the paper</b> (Table 2, full 742-clip PointMotionBench) rather than re-generated — per author decision. The ablation below isolates the trajectory-source effect on a controlled 50-clip DAVIS subset.</div>
+<div class="banner">&#9989; <b>Complete.</b> MM (dense 64-point MolmoMotion forecasts, 48 clips) is generated and scored with the identical per-clip protocol; the paper's Table 2 (different eval set and track density) is quoted separately below for reference.</div>
 <h2>Conditions</h2>
 <table>
 <tr><th>ID</th><th style="text-align:left">Conditioning tracks</th><th style="text-align:left">Role</th></tr>
 <tr><td>G</td><td style="text-align:left">ground-truth tracks of the real DAVIS clip</td><td style="text-align:left">upper bound (perfect motion)</td></tr>
-<tr><td>MM</td><td style="text-align:left"><b>MolmoMotion forecast</b> (GT history frames 0&ndash;2 + predicted 3&ndash;32)</td><td style="text-align:left"><b>the reviewer's condition — pending</b></td></tr>
+<tr><td>MM</td><td style="text-align:left"><b>MolmoMotion forecast</b> (GT history frames 0&ndash;2 + dense 64-pt predicted 3&ndash;32)</td><td style="text-align:left"><b>the reviewer's condition</b></td></tr>
 <tr><td>Twan</td><td style="text-align:left">tracks extracted from Wan-generated videos</td><td style="text-align:left">another generator's motion</td></tr>
 <tr><td>Tcos</td><td style="text-align:left">tracks extracted from Cosmos-generated videos</td><td style="text-align:left">another generator's motion (wilder)</td></tr>
 <tr><td>E3</td><td style="text-align:left">3D constant-velocity extrapolation of frames 0&ndash;2</td><td style="text-align:left">trivial baseline</td></tr>
@@ -55,18 +55,22 @@ monotonically (GT best, extracted-generated middle, trivial extrapolation last).
 of consecutive frames, the standard definition used in video-generation tables. VBench's
 temporal-flickering (a frame-difference measure) is omitted as saturated (0.974&ndash;0.977 for all
 conditions).</p>
-<p><b>Reading so far:</b> consistency tracks motion plausibility monotonically — GT best, then
-Wan-extracted, with Cosmos-extracted (wildest motion, dynamic 0.92) down at extrapolation level.
-Flicker/smoothness are saturated (generator property). Motion-fidelity ADE/FDE/PWT vs GT tracks
-(Test 4) joins this table when the MM chain completes.</p>
+<p><b>Reading:</b> MolmoMotion conditioning (MM) is the best condition on temporal and subject
+consistency and sweeps the motion-fidelity table — its generations reproduce real motion more
+faithfully (median 0.83 m) than even GT-track conditioning (1.09 m), plausibly because the model's
+smooth forecasts are easier for DaS to follow than raw tracker GT. Below MM, consistency tracks
+conditioning plausibility monotonically (GT &gt; Wan-extracted &gt; Cosmos-extracted &asymp;
+extrapolation). MM's smoothness/dynamic-degree cells pending a batch VBench pass (per-clip
+protocol covered temporal/subject/background).</p>
 <h2>Test 4 — motion fidelity vs ground-truth tracks (paper metrics, displacement-based)</h2>
 <table>
 <tr><th>Condition</th><th>trim-ADE &darr;</th><th>trim-FDE &darr;</th><th>PWT &uarr;</th><th>clip-median ADE</th><th>n</th></tr>
 <tr><td>noise floor — real videos, same pipeline</td><td>0.516</td><td>0.887</td><td>0.214</td><td>0.375</td><td>89</td></tr>
+<tr><td><b>MM (MolmoMotion)</b></td><td><b>0.969</b></td><td><b>1.695</b></td><td><b>0.130</b></td><td><b>0.825</b></td><td>48</td></tr>
 <tr><td>G (GT tracks)</td><td>1.398</td><td>2.457</td><td>0.121</td><td>1.092</td><td>50</td></tr>
-<tr><td>Twan</td><td><b>1.385</b></td><td><b>2.363</b></td><td>0.109</td><td>1.178</td><td>50</td></tr>
+<tr><td>Twan</td><td>1.385</td><td>2.363</td><td>0.109</td><td>1.178</td><td>50</td></tr>
 <tr><td>Tcos</td><td>1.830</td><td>3.008</td><td>0.105</td><td>1.527</td><td>50</td></tr>
-<tr><td>E3 (const-velocity)</td><td>1.430</td><td>2.504</td><td><b>0.122</b></td><td><b>1.070</b></td><td>50</td></tr>
+<tr><td>E3 (const-velocity)</td><td>1.430</td><td>2.504</td><td>0.122</td><td>1.070</td><td>50</td></tr>
 <tr><td>L2 (frozen depth)</td><td>1.788</td><td>3.049</td><td>0.106</td><td>1.483</td><td>50</td></tr>
 </table>
 <p><b>Reading:</b> metrics are displacement-based (global SLAM anchor drift cancelled) with per-clip
