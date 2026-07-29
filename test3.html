@@ -13,16 +13,17 @@
 <div id="sub">PointMotionBench-DAVIS &middot; 86 clips (paragliding excluded: degenerate-depth outlier, ADE 15.8 m) &middot; 24 points/clip &middot; fixed t&#8320; &middot; MolmoMotion-4B-H3-F30</div>
 <table>
 <tr><th>Condition</th><th>ADE &darr;</th><th>FDE &darr;</th><th>PWT &uarr;</th><th>clip-mean ADE</th><th>clip-median ADE</th></tr>
-<tr><td>A — full model</td><td>0.686</td><td>1.404</td><td>0.177</td><td>0.707</td><td>0.431</td></tr>
-<tr><td>C — black history frames (language-only)</td><td>1.401</td><td>2.845</td><td>0.091</td><td>1.421</td><td>0.897</td></tr>
-<tr><td>D2 — direction-reversed captions</td><td>0.680</td><td>1.298</td><td>0.173</td><td>0.705</td><td>0.465</td></tr>
+<tr><td>A — full model (true caption)</td><td>0.686</td><td>1.404</td><td>0.177</td><td>0.707</td><td>0.431</td></tr>
+<tr><td>C — black history frames (vision removed)</td><td><b>1.401</b></td><td><b>2.845</b></td><td><b>0.091</b></td><td><b>1.421</b></td><td><b>0.897</b></td></tr>
+<tr><td>D1 — swapped caption (wrong object+action)</td><td>0.716</td><td>1.427</td><td>0.177</td><td>0.743</td><td>0.431</td></tr>
+<tr><td>D2 — direction-reversed caption</td><td>0.680</td><td>1.298</td><td>0.173</td><td>0.705</td><td>0.465</td></tr>
+<tr><td>D3 — "remains completely still" caption</td><td>0.697</td><td>1.370</td><td>0.177</td><td>0.726</td><td>0.435</td></tr>
 </table>
 <img src="data/horizon_curve.png" alt="mean 3D error vs forecast horizon">
-<p><b>Reading:</b> removing vision (C) doubles the error (clip-median 0.897 vs 0.431) and degrades
-toward the trivial baselines, while direction-reversed captions leave accuracy unchanged
-(clip-mean 0.705 vs 0.707; clip-median 0.465 vs 0.431 — D2 slightly worse, as expected for a
-counterfactual). Per-clip: unambiguous directional reversals hurt (bus +0.72, boat +0.41,
-hike +0.31 ADE), showing the language conditioning is real; visual dynamics dominate under
-conflict. The model beats static and constant-velocity extrapolation by ~2.8&times; at the
+<p><b>Reading:</b> removing vision (C) doubles the error (clip-median 0.897 vs 0.431), while ALL three
+adversarial-caption conditions — wrong object+action (D1), reversed direction (D2), and an explicit
+"remains completely still" (D3) — stay within &plusmn;0.036 ADE of the true caption (clip-medians
+0.431&ndash;0.465). On real video the model's predictions are driven by visual dynamics, not caption
+templates. The model beats static and constant-velocity extrapolation by ~2.8&times; at the
 30-frame horizon (1.25 m vs 3.48/3.84 m).</p>
 </body></html>
