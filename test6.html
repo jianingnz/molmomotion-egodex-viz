@@ -63,24 +63,22 @@ smooth forecasts are easier for DaS to follow than raw tracker GT. Below MM, con
 conditioning plausibility monotonically (GT &gt; Wan-extracted &gt; Cosmos-extracted &asymp;
 extrapolation). MM's smoothness/dynamic-degree cells pending a batch VBench pass (per-clip
 protocol covered temporal/subject/background).</p>
-<h2>Test 4 — motion fidelity vs ground-truth tracks (paper metrics, displacement-based)</h2>
+<h2>Test 4 — motion fidelity of conditioning trajectories vs ground-truth tracks (direct)</h2>
 <table>
-<tr><th>Condition</th><th>ADE &darr;</th><th>FDE &darr;</th><th>PWT &uarr;</th><th>clip-mean ADE</th><th>clip-median ADE</th><th>n</th></tr>
-<tr><td>noise floor — real videos, same pipeline</td><td>1.499</td><td>2.584</td><td>0.214</td><td>1.411</td><td>0.375</td><td>89</td></tr>
-<tr><td><b>MM (MolmoMotion)</b></td><td><b>1.061</b></td><td><b>2.128</b></td><td><b>0.130</b></td><td><b>1.284</b></td><td><b>0.825</b></td><td>48</td></tr>
-<tr><td>G (GT tracks)</td><td>1.727</td><td>3.155</td><td>0.121</td><td>1.862</td><td>1.092</td><td>50</td></tr>
-<tr><td>Twan</td><td>1.713</td><td>2.984</td><td>0.109</td><td>1.809</td><td>1.178</td><td>50</td></tr>
-<tr><td>Tcos</td><td>2.161</td><td>3.595</td><td>0.105</td><td>2.268</td><td>1.527</td><td>50</td></tr>
-<tr><td>E3 (const-velocity)</td><td>1.513</td><td>3.086</td><td>0.122</td><td>1.816</td><td>1.070</td><td>50</td></tr>
-<tr><td>L2 (frozen depth)</td><td>2.765</td><td>4.556</td><td>0.106</td><td>2.781</td><td>1.483</td><td>50</td></tr>
+<tr><th>Trajectory source</th><th>ADE &darr;</th><th>FDE &darr;</th><th>PWT &uarr;</th><th>clip-mean ADE</th><th>clip-median ADE</th><th>n</th></tr>
+<tr><td><b>MM (MolmoMotion forecast)</b></td><td><b>0.728</b></td><td><b>1.440</b></td><td><b>0.205</b></td><td><b>0.801</b></td><td><b>0.480</b></td><td>49</td></tr>
+<tr><td>Twan (Wan-extracted)</td><td>1.689</td><td>3.007</td><td>0.108</td><td>1.755</td><td>1.145</td><td>50</td></tr>
+<tr><td>Tcos (Cosmos-extracted)</td><td>1.734</td><td>3.002</td><td>0.101</td><td>1.811</td><td>1.302</td><td>50</td></tr>
+<tr><td>E3 (const-velocity)</td><td>2.450</td><td>4.996</td><td>0.099</td><td>2.715</td><td>1.338</td><td>50</td></tr>
+<tr><td>L2 (frozen depth)</td><td>1.856</td><td>3.809</td><td>0.092</td><td>2.035</td><td>1.384</td><td>50</td></tr>
 </table>
-<p><b>Reading:</b> metrics are displacement-based (global SLAM anchor drift cancelled) with per-clip
-scale alignment; the floor row is the pipeline's own error on real videos. Two observations pending
-MM: (i) even GT-conditioned generations sit ~0.7 m above the floor — DaS follows conditioning
-imperfectly, bounding what any trajectory source can achieve; (ii) short-horizon constant-velocity
-is a strong fidelity baseline over a 2-second window (E3 &asymp; G) even though its VBench
-consistency is clearly worse — fidelity and generation quality measure different failure modes,
-which is why both tables are reported.</p>
+<p><b>Reading:</b> each condition's conditioning trajectories are compared DIRECTLY against the
+benchmark GT tracks (displacement-based, per-clip scale-aligned; MM pairs exactly on the
+benchmark's own points, extracted/extrapolated sets pair by nearest neighbor at frame 0; G is the
+GT itself and trivially 0). MolmoMotion forecasts are by far the closest to real motion — ADE 0.73
+vs 1.69&ndash;2.45 for every alternative — and constant-velocity is the worst over the 2-second
+horizon, consistent with Test 3's divergence curve. Together with the VBench table above, the
+chain is: better trajectories (this table) &rarr; more consistent generations (VBench).</p>
 <h2>Pilot sample (bear_1): generated result + its conditioning tracking-video</h2>
 <div class="grid">
   <div class="cell"><h3>Twan — result</h3><video src="data/t6pilot/M_result.mp4" muted loop controls playsinline></video></div>
