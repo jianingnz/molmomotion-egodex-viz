@@ -1,25 +1,53 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Test 6 pilot — DaS generations by trajectory source (bear_1)</title>
+<title>Test 6 — DaS trajectory-source ablation</title>
 <style>
- body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:#fafafa;color:#333;padding:18px 22px}
- h1{font-size:17px;font-weight:600;margin-bottom:2px}
- #sub{font-size:13px;color:#888;margin-bottom:14px}
- .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
- .cell{background:#fff;border:1px solid #e2e2e2;border-radius:8px;padding:10px}
- .cell h2{font-size:13px;font-weight:600;margin-bottom:6px}
- .cell h3{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.05em;margin:8px 0 4px}
- video,img{width:100%;border-radius:4px;display:block;background:#000}
- button{font-size:13px;padding:5px 14px;border:1px solid #e2e2e2;border-radius:5px;background:#fff;cursor:pointer;margin-bottom:12px}
+ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:#fafafa;color:#333;padding:18px 22px;max-width:960px}
+ h1{font-size:17px;font-weight:600;margin-bottom:2px} #sub{font-size:13px;color:#888;margin-bottom:10px}
+ .banner{background:#fff7e0;border:1px solid #eda100;border-radius:8px;padding:8px 14px;font-size:13px;margin-bottom:14px}
+ table{border-collapse:collapse;margin:14px 0;font-size:14px}
+ th,td{border:1px solid #e2e2e2;padding:6px 12px;text-align:right} th{background:#fff} td:first-child,th:first-child{text-align:left}
+ p,li{font-size:13px;line-height:1.5} h2{font-size:14px;margin-top:18px}
+ .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:8px}
+ .cell{background:#fff;border:1px solid #e2e2e2;border-radius:8px;padding:8px}
+ .cell h3{font-size:12px;font-weight:600;margin-bottom:5px}
+ video{width:100%;border-radius:4px;background:#000}
 </style></head><body>
-<!--NAV--><div style="display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px 0;padding-bottom:12px;border-bottom:1px solid #e2e2e2;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif"><a href="index.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">EgoDex demo</a><a href="test3.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T1+T3 · Ablations & horizon</a><a href="test2p.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T2 · Deformable / multi-object</a><a href="test5.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T5 · Static points</a><a href="test6.html" style="background:#333;color:#fff;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T6 · Video generation</a><a href="picker.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">Point picker</a></div><!--/NAV-->
-<h1>Test 6 pilot — DaS generation by trajectory source</h1>
-<div id="sub">Clip: bear_1 (wan) &middot; prompt: "a brown bear walks to the left" &middot; 49 frames, 50 steps &middot; same first frame + prompt, only the conditioning tracks differ</div>
-<button onclick="document.querySelectorAll('video').forEach(v=>{v.currentTime=0;v.play()})">&#9654; play all</button>
+<!--NAV--><div style="display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px 0;padding-bottom:12px;border-bottom:1px solid #e2e2e2"><a href="index.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">EgoDex demo</a><a href="test3.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T1+T3 · Ablations & horizon</a><a href="test2p.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T2 · Deformable / multi-object</a><a href="test5.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T5 · Static points</a><a href="test6.html" style="background:#333;color:#fff;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T6 · Video generation</a><a href="picker.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">Point picker</a></div><!--/NAV-->
+<h1>Test 6 — does the video-generation gain come from the trajectory source?</h1>
+<div id="sub">DiffusionAsShader (CogVideoX-5B) &middot; 50 DAVIS categories &middot; same first frame, caption, renderer &amp; 49-frame window for every condition — only the conditioning tracks differ</div>
+<div class="banner">&#9203; <b>MM (MolmoMotion forecast) is the final condition, running now</b> — dense 64-point predictions + 49 generations land overnight; this page updates when scored.</div>
+<h2>Conditions</h2>
+<table>
+<tr><th>ID</th><th style="text-align:left">Conditioning tracks</th><th style="text-align:left">Role</th></tr>
+<tr><td>G</td><td style="text-align:left">ground-truth tracks of the real DAVIS clip</td><td style="text-align:left">upper bound (perfect motion)</td></tr>
+<tr><td>MM</td><td style="text-align:left"><b>MolmoMotion forecast</b> (GT history frames 0&ndash;2 + predicted 3&ndash;32)</td><td style="text-align:left"><b>the reviewer's condition — pending</b></td></tr>
+<tr><td>Twan</td><td style="text-align:left">tracks extracted from Wan-generated videos</td><td style="text-align:left">another generator's motion</td></tr>
+<tr><td>Tcos</td><td style="text-align:left">tracks extracted from Cosmos-generated videos</td><td style="text-align:left">another generator's motion (wilder)</td></tr>
+<tr><td>E3</td><td style="text-align:left">3D constant-velocity extrapolation of frames 0&ndash;2</td><td style="text-align:left">trivial baseline</td></tr>
+<tr><td>L2</td><td style="text-align:left">2D constant-velocity + frozen depth</td><td style="text-align:left">weaker trivial baseline</td></tr>
+</table>
+<p><i>Correction note: an earlier version labeled the Wan-extracted tracks "M (MolmoMotion)". The
+downloaded track set is extracted from generated videos, not model forecasts; the true MolmoMotion
+condition (MM) is generated from the model's own dense predictions.</i></p>
+<h2>VBench (paper's five dimensions)</h2>
+<table>
+<tr><th>Condition</th><th>Subject Cons. &uarr;</th><th>Background Cons. &uarr;</th><th>Temporal Flicker &uarr;</th><th>Motion Smooth &uarr;</th><th>Dynamic Degree</th></tr>
+<tr><td>G (GT tracks)</td><td><b>0.935</b></td><td><b>0.940</b></td><td>0.975</td><td>0.991</td><td>0.70</td></tr>
+<tr><td>MM (MolmoMotion)</td><td colspan="5" style="text-align:center;color:#888">running…</td></tr>
+<tr><td>Twan</td><td>0.929</td><td>0.937</td><td>0.975</td><td>0.991</td><td>0.82</td></tr>
+<tr><td>Tcos</td><td>0.917</td><td>0.933</td><td>0.974</td><td>0.988</td><td>0.92</td></tr>
+<tr><td>E3</td><td>0.915</td><td>0.929</td><td>0.977</td><td>0.992</td><td>0.84</td></tr>
+<tr><td>L2</td><td>0.916</td><td>0.929</td><td>0.975</td><td>0.991</td><td>0.84</td></tr>
+</table>
+<p><b>Reading so far:</b> consistency tracks motion plausibility monotonically — GT best, then
+Wan-extracted, with Cosmos-extracted (wildest motion, dynamic 0.92) down at extrapolation level.
+Flicker/smoothness are saturated (generator property). Motion-fidelity ADE/FDE/PWT vs GT tracks
+(Test 4) joins this table when the MM chain completes.</p>
+<h2>Pilot sample (bear_1): generated result + its conditioning tracking-video</h2>
 <div class="grid">
-  <div class="cell"><h2>First frame (input)</h2><img src="data/t6pilot/first_frame.jpg">
-    <h3>conditions below: generated result + its conditioning tracking video</h3></div>
-  <div class="cell"><h2>M — MolmoMotion tracks</h2><video src="data/t6pilot/M_result.mp4" muted loop playsinline controls></video><h3>conditioning</h3><video src="data/t6pilot/M_tracking.mp4" muted loop playsinline controls></video></div>
-  <div class="cell"><h2>E3 — 3D constant-velocity extrapolation</h2><video src="data/t6pilot/E3_result.mp4" muted loop playsinline controls></video><h3>conditioning</h3><video src="data/t6pilot/E3_tracking.mp4" muted loop playsinline controls></video></div>
-  <div class="cell"><h2>L2 — 2D const-velocity + frozen depth</h2><video src="data/t6pilot/L2_result.mp4" muted loop playsinline controls></video><h3>conditioning</h3><video src="data/t6pilot/L2_tracking.mp4" muted loop playsinline controls></video></div>
-</div></body></html>
+  <div class="cell"><h3>Twan — result</h3><video src="data/t6pilot/M_result.mp4" muted loop controls playsinline></video></div>
+  <div class="cell"><h3>E3 — result</h3><video src="data/t6pilot/E3_result.mp4" muted loop controls playsinline></video></div>
+  <div class="cell"><h3>L2 — result</h3><video src="data/t6pilot/L2_result.mp4" muted loop controls playsinline></video></div>
+</div>
+</body></html>
