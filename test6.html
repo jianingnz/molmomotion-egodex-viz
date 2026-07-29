@@ -44,13 +44,16 @@ generators; the ablation shows generation consistency tracks conditioning-motion
 monotonically (GT best, extracted-generated middle, trivial extrapolation last).</i></p>
 <h2>Ablation VBench (our runs — 50-clip DAVIS subset)</h2>
 <table>
-<tr><th>Condition</th><th>Subject Cons. &uarr;</th><th>Background Cons. &uarr;</th><th>Temporal Flicker &uarr;</th><th>Motion Smooth &uarr;</th><th>Dynamic Degree</th></tr>
-<tr><td>G (GT tracks)</td><td><b>0.935</b></td><td><b>0.940</b></td><td>0.975</td><td>0.991</td><td>0.70</td></tr>
-<tr><td>Twan</td><td>0.929</td><td>0.937</td><td>0.975</td><td>0.991</td><td>0.82</td></tr>
-<tr><td>Tcos</td><td>0.917</td><td>0.933</td><td>0.974</td><td>0.988</td><td>0.92</td></tr>
-<tr><td>E3</td><td>0.915</td><td>0.929</td><td>0.977</td><td>0.992</td><td>0.84</td></tr>
-<tr><td>L2</td><td>0.916</td><td>0.929</td><td>0.975</td><td>0.991</td><td>0.84</td></tr>
+<tr><th>Condition</th><th>Subject Cons. &uarr;</th><th>Background Cons. &uarr;</th><th>Motion Smooth &uarr;</th><th>Dynamic Degree</th></tr>
+<tr><td>G (GT tracks)</td><td><b>0.935</b></td><td><b>0.940</b></td><td>0.991</td><td>0.70</td></tr>
+<tr><td>Twan</td><td>0.929</td><td>0.937</td><td>0.991</td><td>0.82</td></tr>
+<tr><td>Tcos</td><td>0.917</td><td>0.933</td><td>0.988</td><td>0.92</td></tr>
+<tr><td>E3</td><td>0.915</td><td>0.929</td><td>0.992</td><td>0.84</td></tr>
+<tr><td>L2</td><td>0.916</td><td>0.929</td><td>0.991</td><td>0.84</td></tr>
 </table>
+<p style="font-size:12px;color:#888">Temporal-flickering omitted: VBench's closest analogue to the
+paper's "Temporal Consistency" is a different (frame-difference) measure and is saturated across
+all conditions (0.974&ndash;0.977), carrying no signal for this ablation.</p>
 <p><b>Reading so far:</b> consistency tracks motion plausibility monotonically — GT best, then
 Wan-extracted, with Cosmos-extracted (wildest motion, dynamic 0.92) down at extrapolation level.
 Flicker/smoothness are saturated (generator property). Motion-fidelity ADE/FDE/PWT vs GT tracks
