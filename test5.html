@@ -10,16 +10,17 @@
 </style></head><body>
 <!--NAV--><div style="display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px 0;padding-bottom:12px;border-bottom:1px solid #e2e2e2;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif"><a href="index.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">EgoDex demo</a><a href="test3.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T1+T3 · Ablations & horizon</a><a href="test2p.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T2 · Deformable / multi-object</a><a href="test5.html" style="background:#333;color:#fff;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T5 · Static points</a><a href="test6.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">T6 · Video generation</a><a href="picker.html" style="background:#fff;color:#333;text-decoration:none;font-size:12.5px;padding:5px 12px;border:1px solid #d8d8d4;border-radius:6px;white-space:nowrap">Point picker</a></div><!--/NAV-->
 <h1>Test 5 — does the model keep static background points static?</h1>
-<div id="sub">87 DAVIS clips (paragliding excluded: degenerate depth) &middot; 8 background points/clip (auto-placed, MoGe-lifted, scale-aligned) &middot; drift = ||p&#770;<sub>t</sub> &minus; p<sub>t&#8320;</sub>|| at t&#8320;+30 &middot; GT = zero motion in camera-frame-at-t&#8320;</div>
+<div id="sub">87 DAVIS clips (no exclusions) &middot; 8 background points/clip (auto-placed, MoGe-lifted, scale-aligned) &middot; drift = ||p&#770;<sub>t</sub> &minus; p<sub>t&#8320;</sub>|| at t&#8320;+30 &middot; GT = zero motion in camera-frame-at-t&#8320;</div>
 <table>
 <tr><th>Config</th><th>median drift (cm)</th><th>p90 (cm)</th><th>mean (cm)</th><th>&le;1 cm</th><th>&le;2 cm</th><th>&le;5 cm</th></tr>
-<tr><td>bg-only + action caption</td><td><b>0.040</b></td><td><b>0.095</b></td><td><b>5.2</b></td><td><b>97%</b></td><td><b>97%</b></td><td><b>98%</b></td></tr>
-<tr><td>bg-only + neutral caption</td><td>0.050</td><td>0.44</td><td>6.0</td><td>91%</td><td>91%</td><td>94%</td></tr>
-<tr><td>mixed 4 obj + 4 bg, action caption</td><td>0.060</td><td>4.5</td><td>18.2</td><td>80%</td><td>84%</td><td>91%</td></tr>
+<tr><td>bg-only + action caption</td><td><b>0.040</b></td><td><b>0.116</b></td><td><b>799</b></td><td><b>95%</b></td><td><b>95%</b></td><td><b>97%</b></td></tr>
+<tr><td>bg-only + neutral caption</td><td>0.050</td><td>1.29</td><td>800</td><td>90%</td><td>90%</td><td>93%</td></tr>
+<tr><td>mixed 4 obj + 4 bg, action caption</td><td>0.060</td><td>6.91</td><td>814</td><td>79%</td><td>83%</td><td>90%</td></tr>
 </table>
 <p><b>Headline:</b> for the typical clip the model predicts background points as <b>perfectly static</b>
-(median drift &lt;0.1 cm over 30 frames; 97% of clips within 1 cm in the bg-only/action config).
-The mean is dominated by a structured tail of ~19 clips, which decomposes into two phenomena:</p>
+(median drift &lt;0.1 cm over 30 frames; 95% of clips within 1 cm in the bg-only/action config).
+The mean is dominated by a heavy tail — chiefly the degenerate-depth clip paragliding (&asymp;690 m
+at extreme depth) plus ~19 structured outliers decomposing into:</p>
 <ul>
 <li><b>Camera motion / degenerate scenes</b> (night-race 393 cm, bus, tuk-tuk, upside-down, stroller):
 "static in camera-frame-at-t&#8320;" requires implicit camera-motion estimation; strong ego-motion or
