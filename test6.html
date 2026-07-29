@@ -35,7 +35,7 @@ condition (MM) is generated from the model's own dense predictions.</i></p>
 <tr><th>Method</th><th>Temporal Cons. &uarr;</th><th>Subject Cons. &uarr;</th><th>Motion Smooth &uarr;</th><th>Dynamic Degree</th><th>Background Cons. &uarr;</th></tr>
 <tr><td><b>DaS + MolmoMotion</b></td><td><b>0.968</b></td><td><b>0.950</b></td><td><b>0.990</b></td><td>0.876</td><td><b>0.948</b></td></tr>
 <tr><td>CogVideoX-5B (unconditioned)</td><td>0.964</td><td>0.939</td><td>0.988</td><td>0.861</td><td>0.941</td></tr>
-<tr><td>Wan-14B (unconditioned)</td><td>0.965</td><td>0.940</td><td>0.983</td><td>0.908</td><td>0.947</td></tr>
+<tr><td>Wan-14B (unconditioned)</td><td>0.965</td><td>0.940</td><td>0.983</td><td><b>0.908</b></td><td>0.947</td></tr>
 </table>
 <p><i>Note: the paper's table and our ablation use different evaluation sets (full benchmark vs
 50-clip DAVIS subset) and are not directly comparable row-to-row. Together they answer the
@@ -45,11 +45,11 @@ monotonically (GT best, extracted-generated middle, trivial extrapolation last).
 <h2>Ablation VBench (our runs — 50-clip DAVIS subset)</h2>
 <table>
 <tr><th>Condition</th><th>Temporal Cons. &uarr;</th><th>Subject Cons. &uarr;</th><th>Background Cons. &uarr;</th><th>Motion Smooth &uarr;</th><th>Dynamic Degree</th></tr>
-<tr><td>G (GT tracks)</td><td>0.988</td><td><b>0.935</b></td><td><b>0.940</b></td><td>0.991</td><td>0.70</td></tr>
+<tr><td>G (GT tracks)</td><td><b>0.988</b></td><td><b>0.935</b></td><td><b>0.940</b></td><td>0.991</td><td>0.70</td></tr>
 <tr><td>Twan</td><td>0.986</td><td>0.929</td><td>0.937</td><td>0.991</td><td>0.82</td></tr>
-<tr><td>Tcos</td><td>0.983</td><td>0.917</td><td>0.933</td><td>0.988</td><td>0.92</td></tr>
-<tr><td>E3</td><td>0.987</td><td>0.915</td><td>0.929</td><td>0.992</td><td>0.84</td></tr>
-<tr><td>L2</td><td>0.988</td><td>0.916</td><td>0.929</td><td>0.991</td><td>0.84</td></tr>
+<tr><td>Tcos</td><td>0.983</td><td>0.917</td><td>0.933</td><td>0.988</td><td><b>0.92</b></td></tr>
+<tr><td>E3</td><td>0.987</td><td>0.915</td><td>0.929</td><td><b>0.992</b></td><td>0.84</td></tr>
+<tr><td>L2</td><td><b>0.988</b></td><td>0.916</td><td>0.929</td><td>0.991</td><td>0.84</td></tr>
 </table>
 <p style="font-size:12px;color:#888">Temporal Consistency = mean CLIP (ViT-B/32) cosine similarity
 of consecutive frames, the standard definition used in video-generation tables. VBench's
@@ -59,15 +59,15 @@ conditions).</p>
 Wan-extracted, with Cosmos-extracted (wildest motion, dynamic 0.92) down at extrapolation level.
 Flicker/smoothness are saturated (generator property). Motion-fidelity ADE/FDE/PWT vs GT tracks
 (Test 4) joins this table when the MM chain completes.</p>
-<h2>Test 4 — motion fidelity &amp; adherence (displacement ADE, meters; clip-medians)</h2>
+<h2>Test 4 — motion fidelity vs ground-truth tracks (paper metrics, displacement-based)</h2>
 <table>
-<tr><th>Condition</th><th>Fidelity vs GT (median)</th><th>Fidelity PWT &uarr;</th><th>Adherence to conditioning (median)</th><th>n clips</th></tr>
-<tr><td>noise floor — real videos through the same pipeline</td><td><b>0.375</b></td><td>0.214</td><td>—</td><td>89</td></tr>
-<tr><td>G (GT tracks)</td><td>1.092</td><td>0.121</td><td>1.092</td><td>50</td></tr>
-<tr><td>E3 (const-velocity)</td><td>1.070</td><td>0.122</td><td>0.960</td><td>50</td></tr>
-<tr><td>Twan</td><td>1.178</td><td>0.109</td><td><b>0.822</b></td><td>50</td></tr>
-<tr><td>L2 (frozen depth)</td><td>1.483</td><td>0.106</td><td>0.953</td><td>50</td></tr>
-<tr><td>Tcos</td><td>1.527</td><td>0.105</td><td>0.981</td><td>50</td></tr>
+<tr><th>Condition</th><th>ADE &darr;</th><th>FDE &darr;</th><th>PWT &uarr;</th><th>clip-mean ADE</th><th>clip-median ADE</th></tr>
+<tr><td>noise floor — real videos, same pipeline</td><td>1.499</td><td>2.584</td><td>0.214</td><td>1.411</td><td>0.375</td></tr>
+<tr><td>G (GT tracks)</td><td>1.727</td><td>3.155</td><td>0.121</td><td>1.862</td><td>1.092</td></tr>
+<tr><td>Twan</td><td>1.713</td><td><b>2.984</b></td><td>0.109</td><td><b>1.809</b></td><td>1.178</td></tr>
+<tr><td>Tcos</td><td>2.161</td><td>3.595</td><td>0.105</td><td>2.268</td><td>1.527</td></tr>
+<tr><td>E3 (const-velocity)</td><td><b>1.513</b></td><td>3.086</td><td><b>0.122</b></td><td>1.816</td><td><b>1.070</b></td></tr>
+<tr><td>L2 (frozen depth)</td><td>2.765</td><td>4.556</td><td>0.106</td><td>2.781</td><td>1.483</td></tr>
 </table>
 <p><b>Reading:</b> metrics are displacement-based (global SLAM anchor drift cancelled) with per-clip
 scale alignment; the floor row is the pipeline's own error on real videos. Two observations pending
