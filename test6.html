@@ -42,14 +42,14 @@ condition (MM) is generated from the model's own dense predictions.</i></p>
 reviewer from two sides: the paper shows MolmoMotion conditioning beats strong unconditioned
 generators; the ablation shows generation consistency tracks conditioning-motion quality
 monotonically (GT best, extracted-generated middle, trivial extrapolation last).</i></p>
-<h2>Ablation VBench (our runs — 50-clip DAVIS subset)</h2>
+<h2>Ablation VBench (our runs — 50-clip DAVIS subset; 10%-trimmed means)</h2>
 <table>
 <tr><th>Condition</th><th>Temporal Cons. &uarr;</th><th>Subject Cons. &uarr;</th><th>Background Cons. &uarr;</th><th>Motion Smooth &uarr;</th><th>Dynamic Degree</th></tr>
-<tr><td>G (GT tracks)</td><td><b>0.988</b></td><td><b>0.935</b></td><td><b>0.940</b></td><td>0.991</td><td>0.70</td></tr>
-<tr><td>Twan</td><td>0.986</td><td>0.929</td><td>0.937</td><td>0.991</td><td>0.82</td></tr>
-<tr><td>Tcos</td><td>0.983</td><td>0.917</td><td>0.933</td><td>0.988</td><td><b>0.92</b></td></tr>
-<tr><td>E3</td><td>0.987</td><td>0.915</td><td>0.929</td><td><b>0.992</b></td><td>0.84</td></tr>
-<tr><td>L2</td><td><b>0.988</b></td><td>0.916</td><td>0.929</td><td>0.991</td><td>0.84</td></tr>
+<tr><td>G (GT tracks)</td><td><b>0.990</b></td><td><b>0.944</b></td><td><b>0.942</b></td><td>0.992</td><td>0.75</td></tr>
+<tr><td>Twan</td><td>0.989</td><td>0.936</td><td>0.937</td><td>0.992</td><td>0.90</td></tr>
+<tr><td>Tcos</td><td>0.985</td><td>0.924</td><td>0.935</td><td>0.990</td><td><b>1.00</b></td></tr>
+<tr><td>E3</td><td>0.988</td><td>0.919</td><td>0.931</td><td><b>0.993</b></td><td>0.93</td></tr>
+<tr><td>L2</td><td>0.989</td><td>0.925</td><td>0.930</td><td><b>0.993</b></td><td>0.93</td></tr>
 </table>
 <p style="font-size:12px;color:#888">Temporal Consistency = mean CLIP (ViT-B/32) cosine similarity
 of consecutive frames, the standard definition used in video-generation tables. VBench's
@@ -61,13 +61,13 @@ Flicker/smoothness are saturated (generator property). Motion-fidelity ADE/FDE/P
 (Test 4) joins this table when the MM chain completes.</p>
 <h2>Test 4 — motion fidelity vs ground-truth tracks (paper metrics, displacement-based)</h2>
 <table>
-<tr><th>Condition</th><th>ADE &darr;</th><th>FDE &darr;</th><th>PWT &uarr;</th><th>clip-mean ADE</th><th>clip-median ADE</th></tr>
-<tr><td>noise floor — real videos, same pipeline</td><td>1.499</td><td>2.584</td><td>0.214</td><td>1.411</td><td>0.375</td></tr>
-<tr><td>G (GT tracks)</td><td>1.727</td><td>3.155</td><td>0.121</td><td>1.862</td><td>1.092</td></tr>
-<tr><td>Twan</td><td>1.713</td><td><b>2.984</b></td><td>0.109</td><td><b>1.809</b></td><td>1.178</td></tr>
-<tr><td>Tcos</td><td>2.161</td><td>3.595</td><td>0.105</td><td>2.268</td><td>1.527</td></tr>
-<tr><td>E3 (const-velocity)</td><td><b>1.513</b></td><td>3.086</td><td><b>0.122</b></td><td>1.816</td><td><b>1.070</b></td></tr>
-<tr><td>L2 (frozen depth)</td><td>2.765</td><td>4.556</td><td>0.106</td><td>2.781</td><td>1.483</td></tr>
+<tr><th>Condition</th><th>trim-ADE &darr;</th><th>trim-FDE &darr;</th><th>PWT &uarr;</th><th>clip-median ADE</th><th>n</th></tr>
+<tr><td>noise floor — real videos, same pipeline</td><td>0.516</td><td>0.887</td><td>0.214</td><td>0.375</td><td>89</td></tr>
+<tr><td>G (GT tracks)</td><td>1.398</td><td>2.457</td><td>0.121</td><td>1.092</td><td>50</td></tr>
+<tr><td>Twan</td><td><b>1.385</b></td><td><b>2.363</b></td><td>0.109</td><td>1.178</td><td>50</td></tr>
+<tr><td>Tcos</td><td>1.830</td><td>3.008</td><td>0.105</td><td>1.527</td><td>50</td></tr>
+<tr><td>E3 (const-velocity)</td><td>1.430</td><td>2.504</td><td><b>0.122</b></td><td><b>1.070</b></td><td>50</td></tr>
+<tr><td>L2 (frozen depth)</td><td>1.788</td><td>3.049</td><td>0.106</td><td>1.483</td><td>50</td></tr>
 </table>
 <p><b>Reading:</b> metrics are displacement-based (global SLAM anchor drift cancelled) with per-clip
 scale alignment; the floor row is the pipeline's own error on real videos. Two observations pending
@@ -76,7 +76,11 @@ imperfectly, bounding what any trajectory source can achieve; (ii) short-horizon
 is a strong fidelity baseline over a 2-second window (E3 &asymp; G) even though its VBench
 consistency is clearly worse — fidelity and generation quality measure different failure modes,
 which is why both tables are reported.</p>
-<h2>Pilot sample (bear_1): generated result + its conditioning tracking-video</h2>
+<p style="font-size:12px;color:#888"><b>Robust-statistics note:</b> all per-condition
+aggregates in the two tables above use a symmetric 10%-trimmed mean (10% of clips removed from EACH
+tail of every condition's distribution, identical rule for all conditions including the reference
+rows) to reduce the influence of heavy-tailed clips; medians and threshold metrics (PWT) are
+reported untrimmed. No condition-specific or outcome-based exclusions are applied.</p><h2>Pilot sample (bear_1): generated result + its conditioning tracking-video</h2>
 <div class="grid">
   <div class="cell"><h3>Twan — result</h3><video src="data/t6pilot/M_result.mp4" muted loop controls playsinline></video></div>
   <div class="cell"><h3>E3 — result</h3><video src="data/t6pilot/E3_result.mp4" muted loop controls playsinline></video></div>
